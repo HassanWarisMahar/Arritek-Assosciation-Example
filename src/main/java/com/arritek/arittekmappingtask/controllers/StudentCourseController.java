@@ -1,5 +1,7 @@
 package com.arritek.arittekmappingtask.controllers;
 
+import com.arritek.arittekmappingtask.exceptions.BadResourceException;
+import com.arritek.arittekmappingtask.exceptions.ResourceAlreadyExistsException;
 import com.arritek.arittekmappingtask.exceptions.ResourceNotFoundException;
 import com.arritek.arittekmappingtask.models.Course;
 import com.arritek.arittekmappingtask.models.Student;
@@ -27,22 +29,31 @@ public class StudentCourseController {
     private CourseService courseService;
 
 
-    // create a student
-    Student student = new Student("John Doe", 15, "8th");
+    @PostMapping("/student")
+    public void assignCourse() throws BadResourceException, ResourceAlreadyExistsException {
+        Student student = new Student("Hassan Waris",15,"A");
+        studentService.save(student);
 
-    // save the student
-            studentRepository.save(student);
 
-    // create three courses
-    Course course1 = new Course("Machine Learning", "ML", 12, 1500);
-    Course course2 = new Course("Database Systems", "DS", 8, 800);
-    Course course3 = new Course("Web Basics", "WB", 10, 0);
-    // save courses
-            courseRepository.saveAll(Arrays.asList(course1, course2, course3));
-    // add courses to the student
-            student.getCourses().addAll(Arrays.asList(course1, course2, course3));
-    // update the student
-            studentRepository.save(student);
+    }
+
+//    // create a student
+//    Student student = new Student("John Doe", 15, "8th");
+//
+//    // save the student
+//            studentRepository.save(student);
+//
+//    // create three courses
+//    Course course1 = new Course("Machine Learning", "ML", 12, 1500);
+//    Course course2 = new Course("Database Systems", "DS", 8, 800);
+//    Course course3 = new Course("Web Basics", "WB", 10, 0);
+//    // save courses
+//            courseRepository.saveAll(Arrays.asList(course1, course2, course3));
+//    // add courses to the student
+//            student.getCourses().addAll(Arrays.asList(course1, course2, course3));
+//    // update the student
+//            studentRepository.save(student);
+//
 
     //****************************************************************************
     @GetMapping(value = "/courses")
