@@ -1,7 +1,9 @@
 package com.arritek.arittekmappingtask.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,6 +15,7 @@ import java.util.Set;
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "students")
 public class Student implements Serializable {
@@ -25,21 +28,26 @@ public class Student implements Serializable {
     private int age;
     private String grade;
 
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "students_courses",
+    @JoinTable(name = "student_enrolled",
             joinColumns = {
                     @JoinColumn(
                             name = "student_id", referencedColumnName = "id",
                             nullable = false, updatable = false)
             },
             inverseJoinColumns = {
-                    @JoinColumn(name = "course_id", referencedColumnName = "id",
+                    @JoinColumn(name = "subject_id", referencedColumnName = "id",
                             nullable = false, updatable = false)
     })
-    private Set<Course> courses = new HashSet<>();
+    private Set<Subject> courses = new HashSet<>();
 
-    public Student(String hassan_waris, int i, String a) {
+public Student(String name, int age, String grade ,Set<Subject> courses) {
 
+        this.name = name;
+        this.age = age;
+        this.grade=grade;
+        this.courses=courses;
     }
 
     @Override
