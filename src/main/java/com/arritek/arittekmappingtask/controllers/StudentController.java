@@ -4,7 +4,6 @@ import com.arritek.arittekmappingtask.exceptions.BadResourceException;
 import com.arritek.arittekmappingtask.exceptions.ResourceAlreadyExistsException;
 import com.arritek.arittekmappingtask.exceptions.ResourceNotFoundException;
 import com.arritek.arittekmappingtask.models.Student;
-import com.arritek.arittekmappingtask.repositories.StudentRepository;
 import com.arritek.arittekmappingtask.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,7 @@ import java.util.List;
 
 @RestController
 
-@RequestMapping(value = "/students")
+@RequestMapping(value = "/student")
 public class StudentController {
 
     @Autowired
@@ -27,10 +26,16 @@ public class StudentController {
     }
 
     @PostMapping()
-    Student createStudent(@RequestBody Student student) throws BadResourceException, ResourceAlreadyExistsException {
+    List<Student> createStudent(@RequestBody Student student) throws BadResourceException, ResourceAlreadyExistsException {
          studentService.save(student);
-         return (Student) studentService.findAll();
+         return  studentService.findAll();
     }
+
+    @PutMapping
+    String updateStudent(@RequestBody Student student) throws BadResourceException, ResourceNotFoundException {
+        return studentService.update(student);
+    }
+
     @DeleteMapping(value="/{id}")
     public ResponseEntity<String> deleteStudent(@PathVariable(name = "id") Long studentId) throws ResourceNotFoundException {
         String message = studentService.deleteById(studentId);

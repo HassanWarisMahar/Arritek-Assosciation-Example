@@ -6,13 +6,9 @@ import com.arritek.arittekmappingtask.exceptions.ResourceNotFoundException;
 import com.arritek.arittekmappingtask.models.Teacher;
 import com.arritek.arittekmappingtask.repositories.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,46 +22,50 @@ public class TeacherService {
     }
 
     public Teacher findById(Long id) throws ResourceNotFoundException {
-        Teacher contact = teacherRepository.findById(id).orElse(null);
-        if (contact == null) {
+        Teacher teacher = teacherRepository.findById(id).orElse(null);
+        if (teacher == null) {
             throw new ResourceNotFoundException("Cannot find Teacher with id: " + id);
-        } else return contact;
+        } else return teacher;
     }
 
     public Teacher save(Teacher teacher) throws BadResourceException, ResourceAlreadyExistsException {
         if (!StringUtils.isEmpty(teacher.getName())) {
             if (teacher.getId() != null && existsById(teacher.getId())) {
-                throw new ResourceAlreadyExistsException("Contact with id: " +teacher.getId() +
+                throw new ResourceAlreadyExistsException("Teacher with id: " +teacher.getId() +
                         " already exists");
             }
             return teacherRepository.save(teacher);
         } else {
-            BadResourceException exc = new BadResourceException("Failed to save contact");
-            exc.addErrorMessage("Contact is null or empty");
+            BadResourceException exc = new BadResourceException("Failed to save teacher");
+            exc.addErrorMessage("Teacher is null or empty");
             throw exc;
         }
     }
 
-    public void update(Teacher teacher)
+    public Teacher update(Teacher teacher)
             throws BadResourceException, ResourceNotFoundException {
         if (!StringUtils.isEmpty(teacher.getName())) {
             if (!existsById(teacher.getId())) {
-                throw new ResourceNotFoundException("Cannot find Contact with id: " +teacher.getId());
+                throw new ResourceNotFoundException("Cannot find teacher with id: " +teacher.getId());
             }
             teacherRepository.save(teacher);
         } else {
-            BadResourceException exc = new BadResourceException("Failed to save contact");
-            exc.addErrorMessage("Contact is null or empty");
+            BadResourceException exc = new BadResourceException("Failed to save teacher");
+            exc.addErrorMessage("Teacher is null or empty");
             throw exc;
         }
+        return teacher;
     }
 
-    public void deleteById(Long id) throws ResourceNotFoundException {
+    public String deleteById(Long id) throws ResourceNotFoundException {
         if (!existsById(id)) {
-            throw new ResourceNotFoundException("Cannot find contact with id: " + id);
+            //throw new ResourceNotFoundException("Cannot find teacher with id: " + id);
+            return  "Cannot find teacher with id: " + id;
         } else {
             teacherRepository.deleteById(id);
+            return "Deleted successfully";
         }
+
     }
 
     public Long count() {
