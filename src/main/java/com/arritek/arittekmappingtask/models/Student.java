@@ -1,6 +1,5 @@
 package com.arritek.arittekmappingtask.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,16 +38,34 @@ public class Student implements Serializable {
             inverseJoinColumns = {
                     @JoinColumn(name = "subject_id", referencedColumnName = "id",
                             nullable = false, updatable = false)
-    })
-    private Set<Subject> courses = new HashSet<>();
+            })
+    private Set<Subject> subjects = new HashSet<>();
 
-public Student(String name, int age, String grade ,Set<Subject> courses) {
+    public void addCourse(Subject subject) {
+        this.subjects.add(subject);
+        subject.getEnrolledStudents().add(this);
+    }
+
+    public void removeSubjects(Subject subject) {
+        this.getSubjects().remove(subject);
+        subject.getEnrolledStudents().remove(this);
+    }
+
+    public void removeSubjects() {
+        for (Subject subject : new HashSet<>(subjects)) {
+            removeSubjects(subject);
+        }
+    }
+
+
+    public Student(String name, int age, String grade, Set<Subject> subjects) {
 
         this.name = name;
         this.age = age;
-        this.grade=grade;
-        this.courses=courses;
+        this.grade = grade;
+        this.subjects = subjects;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -72,4 +89,6 @@ public Student(String name, int age, String grade ,Set<Subject> courses) {
                 ", grade='" + grade + '\'' +
                 '}';
     }
+
+
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -64,11 +65,24 @@ public class StudentService {
         }
     }
 
-    public void deleteById(Long id) throws ResourceNotFoundException {
+    public String deleteStudent(Long studentId) {
+        Optional<Student> student = studentRepository.findById(studentId);
+        //Remove the related subjects from student entity.
+        if(student.isPresent()) {
+            student.get().removeSubjects();
+            studentRepository.deleteById(student.get().getId());
+            return "Student with id: " + studentId + " deleted successfully!";
+        }
+        return null;
+    }
+
+    public String  deleteById(Long id) throws ResourceNotFoundException {
         if (!existsById(id)) {
-            throw new ResourceNotFoundException("Cannot find student with id: " + id);
+            //throw new ResourceNotFoundException("Cannot find student with id: " + id);
+           return "Cannot find student with id: " + id;
         } else {
-            studentRepository.deleteById(id);
+             studentRepository.deleteById(id);
+            return "Succssfull";
         }
     }
 

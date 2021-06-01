@@ -32,4 +32,6 @@ public class Subject {
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
     private Teacher teacher;
 
+
+
 }
