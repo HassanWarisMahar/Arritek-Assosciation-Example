@@ -82,7 +82,7 @@ public class StudentService {
            return "Cannot find student with id: " + id;
         } else {
              studentRepository.deleteById(id);
-            return "Succssfull";
+            return " deleted successfully!";
         }
     }
 
