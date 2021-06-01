@@ -35,9 +35,6 @@ public class SubjectService {
         return subjectRepository.findAll();
     }
 
-    //    public Subject save(Subject subject) {
-//        return  subjectRepository.save(subject);
-//    }
     public Subject save(Subject subject) throws BadResourceException, ResourceAlreadyExistsException {
         if (!StringUtils.isEmpty(subject.getName())) {
             if (subject.getId() != null && existsById(subject.getId())) {
