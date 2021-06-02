@@ -10,3 +10,6 @@ https://medium.com/@milan.brankovic/spring-advanced-search-filtering-5ee850f9458
 
 Interceptors
 https://medium.com/@knoldus/spring-interceptors-how-to-use-them-correctly-7cd5a6da7b19
+
+
+https://www.baeldung.com/exception-handling-for-rest-with-spring
