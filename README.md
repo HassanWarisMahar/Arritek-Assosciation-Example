@@ -16,4 +16,28 @@ https://www.baeldung.com/exception-handling-for-rest-with-spring
 
 
 
-https://github.com/dariawantech/spring-boot-thymeleaf-example
+https://github.com/dariawantech/spring-boot-thymeleaf-exampler
+
+#Project Structure for Java Spring Boot Project.
+
+config - class which will read from property files
+
+cache - caching mechanism class files
+
+constants - constant defined class
+
+controller - controller class
+
+exception - exception class
+
+model - pojos classes will be present
+
+security - security classes
+
+service - Impl classes
+
+util - utility classes
+
+validation - validators classes
+
+bootloader - main class
