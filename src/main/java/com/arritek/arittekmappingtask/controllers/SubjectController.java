@@ -3,7 +3,6 @@ package com.arritek.arittekmappingtask.controllers;
 import com.arritek.arittekmappingtask.exceptions.BadResourceException;
 import com.arritek.arittekmappingtask.exceptions.ResourceAlreadyExistsException;
 import com.arritek.arittekmappingtask.exceptions.ResourceNotFoundException;
-import com.arritek.arittekmappingtask.models.Student;
 import com.arritek.arittekmappingtask.models.Subject;
 import com.arritek.arittekmappingtask.services.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,7 @@ public class SubjectController {
     }
 
     @PutMapping(value = "/{subjectId}/student/{studentId}")
-    Subject addStudentToSubject(
+    String addStudentToSubject(
             @PathVariable Long subjectId,
             @PathVariable Long studentId
     ) {
@@ -54,7 +53,7 @@ public class SubjectController {
 
 
     @PutMapping(value = "/{subjectId}/teacher/{teacherId}")
-    Subject assignTeacherToSubject(
+    String assignTeacherToSubject(
             @PathVariable Long subjectId,
             @PathVariable Long teacherId
     ) {

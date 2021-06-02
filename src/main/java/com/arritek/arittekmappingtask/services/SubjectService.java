@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class SubjectService {
@@ -26,7 +25,15 @@ public class SubjectService {
     @Autowired
     TeacherRepository teacherRepository;
 
-    private boolean existsById(Long id) {
+    private boolean existsSubjectById(Long id) {
+        return subjectRepository.existsById(id);
+    }
+
+    private boolean existsStudentById(Long id) {
+        return subjectRepository.existsById(id);
+    }
+
+    private boolean existsTeacherById(Long id) {
         return subjectRepository.existsById(id);
     }
 
@@ -37,7 +44,7 @@ public class SubjectService {
 
     public Subject save(Subject subject) throws BadResourceException, ResourceAlreadyExistsException {
         if (!StringUtils.isEmpty(subject.getName())) {
-            if (subject.getId() != null && existsById(subject.getId())) {
+            if (subject.getId() != null && existsSubjectById(subject.getId())) {
                 throw new ResourceAlreadyExistsException("Subject with id: " + subject.getId() +
                         " already exists");
             } else
@@ -53,11 +60,11 @@ public class SubjectService {
     public String update(Subject subject)
             throws BadResourceException, ResourceNotFoundException {
         if (!StringUtils.isEmpty(subject.getName())) {
-            if (!existsById(subject.getId())) {
+            if (!existsSubjectById(subject.getId())) {
                 //throw new ResourceNotFoundException("Cannot find Student with id: " + student.getId());
                 return "Cannot find subject with id: " + subject.getId();
-            }
-            subjectRepository.save(subject);
+            } else
+                subjectRepository.save(subject);
         } else {
             BadResourceException exc = new BadResourceException("Failed to update subject");
             exc.addErrorMessage("Subject is null or empty");
@@ -67,7 +74,7 @@ public class SubjectService {
     }
 
     public String deleteById(Long id) throws ResourceNotFoundException {
-        if (!existsById(id)) {
+        if (!existsSubjectById(id)) {
             //throw new ResourceNotFoundException("Cannot find student with id: " + id);
             return "Cannot find subject with id: " + id;
         } else {
@@ -80,37 +87,63 @@ public class SubjectService {
         return subjectRepository.count();
     }
 
-    public Subject assignStudentSubject(Long subjectId, Long studentId) {
+    public String assignStudentSubject(Long subjectId, Long studentId) {
 
-        Subject subject = subjectRepository.findById(subjectId).get();
-        Student student = studentRepository.findById(studentId).get();
+        Subject subject = null;
+        Student student = null;
 
+        if (existsStudentById(studentId) && existsSubjectById(subjectId)) {
+            try {
+                subject = subjectRepository.findById(subjectId).get();
+                student = studentRepository.findById(studentId).get();
+                subject.enrolledStudents.add(student);
+                subjectRepository.save(subject);
+                return "Assigned Subject to Student Successfully";
 
-        //Checking the id weather null or empty
-        if (subject != null || subject.equals("") && student != null || subject.equals("")) {
-
-            subject.enrolledStudents.add(student);
-            return subjectRepository.save(subject);
+            } catch (Exception e) {
+                e.getMessage();
+                return "Exception ";
+            }
 
         } else {
-            return subject;
+            String message = "";
+            if (!existsStudentById(studentId)) {
+                message = " Student does not exists  with Id # " + studentId + " " + existsStudentById(studentId);
+            }
+            if (!existsSubjectById(subjectId)) {
+                message += " \nSubject does not exists  with Id # " + subjectId + " " + existsSubjectById(subjectId);
+            }
+            return message;
         }
+
     }
 
-    public Subject assignTeacherSubject(Long subjectId, Long teacherId) {
+    public String assignTeacherSubject(Long subjectId, Long teacherId) {
+        Subject subject = null;
+        Teacher teacher = null;
+        if (existsSubjectById(subjectId) && existsSubjectById(teacherId)) {
+            try {
+                subject = subjectRepository.findById(subjectId).get();
+                teacher = teacherRepository.findById(teacherId).get();
+                subject.setTeacher(teacher);
+                subjectRepository.save(subject);
+                return "Assigned Subject to Student Successfully";
 
-        Subject subject = subjectRepository.findById(subjectId).get();
-        Teacher teacher = teacherRepository.findById(teacherId).get();
-
-        boolean hasValue = false;
-        //Checking the id weather null or empty
-        if (subject != null || subject.equals("") && teacher != null || subject.equals("")) {
-
-            subject.setTeacher(teacher);
-            return subjectRepository.save(subject);
+            } catch (Exception e) {
+                e.getMessage();
+                return "Connection Error";
+            }
 
         } else {
-            return subject;
+            String message = "";
+            if(!existsSubjectById(subjectId)){
+
+              message = "Specified Student does not available" + subjectId+"/n";
+            }
+            if(existsTeacherById(teacherId)){
+                message += "Specified Teacher does not available" + teacherId;
+            }
+            return  message;
         }
     }
 }
