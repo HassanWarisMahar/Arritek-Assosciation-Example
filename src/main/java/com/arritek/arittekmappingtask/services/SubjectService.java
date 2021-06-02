@@ -121,13 +121,13 @@ public class SubjectService {
     public String assignTeacherSubject(Long subjectId, Long teacherId) {
         Subject subject = null;
         Teacher teacher = null;
-        if (existsSubjectById(subjectId) && existsSubjectById(teacherId)) {
+        if (existsSubjectById(subjectId) && existsSubjectById(teacherId) && ! subjectId.equals("") && !teacherId.equals("") ) {
             try {
                 subject = subjectRepository.findById(subjectId).get();
                 teacher = teacherRepository.findById(teacherId).get();
                 subject.setTeacher(teacher);
                 subjectRepository.save(subject);
-                return "Assigned Subject to Student Successfully";
+                return "Assigned Subject to Teacher Successfully";
 
             } catch (Exception e) {
                 e.getMessage();
@@ -138,10 +138,10 @@ public class SubjectService {
             String message = "";
             if(!existsSubjectById(subjectId)){
 
-              message = "Specified Student does not available" + subjectId+"/n";
+              message = "Specified Subject does not available with ID #" + subjectId+"\n";
             }
-            if(existsTeacherById(teacherId)){
-                message += "Specified Teacher does not available" + teacherId;
+            if(!existsTeacherById(teacherId)){
+                message += "Specified Teacher does not available with ID #" + teacherId;
             }
             return  message;
         }
