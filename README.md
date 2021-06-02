@@ -13,3 +13,7 @@ https://medium.com/@knoldus/spring-interceptors-how-to-use-them-correctly-7cd5a6
 
 
 https://www.baeldung.com/exception-handling-for-rest-with-spring
+
+
+
+https://github.com/dariawantech/spring-boot-thymeleaf-example
